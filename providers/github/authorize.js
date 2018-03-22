@@ -1,13 +1,15 @@
 const qs = require('querystring');
 
-const config = {
-  client_id: '515dc353f8eb3d5cddd4',
-  redirect_uri: 'http://localhost:3000',
-  scope: 'user repo',
-  allow_signup: false,
-};
+const config = require('./config');
 
 module.exports = token => {
-  config.state = token;
-  return `http://github.com/login/oauth/authorize?${qs.stringify(config)}`;
+  let params = qs.stringify({
+    allow_signup: false,
+    client_id: config.client_id,
+    redirect_uri: config.redirect_uri,
+    scope: config.scopes.join(' '),
+    state: token,
+  });
+
+  return `http://github.com/login/oauth/authorize?${params}`;
 }
